@@ -7,7 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.mahdi.faircorp.R
-
+val BUILDING_ID = "building_id"
+val ROOM_ID = "room_id"
 open class BaseActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater

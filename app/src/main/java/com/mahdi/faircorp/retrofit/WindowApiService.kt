@@ -9,6 +9,6 @@ interface WindowApiService {
     @GET("windows")
     fun findAll(): Call<List<WindowDto>>
 
-    @GET("windows/{id}")
-    fun findById(@Path("id") id: Long): Call<WindowDto>
+    @GET("windows/room/{room_id}")
+    fun findWindowsByRoomId(@Path("room_id") room_id: Long): Call<List<WindowDto>>
 }

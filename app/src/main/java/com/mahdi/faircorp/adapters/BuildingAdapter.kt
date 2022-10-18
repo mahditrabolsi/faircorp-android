@@ -7,11 +7,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mahdi.faircorp.R
 import com.mahdi.faircorp.dto.BuildingDto
-
-class BuildingAdapter : RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder>() {
+interface OnBuildingSelectedListener {
+    fun onBuildingSelected(id: Long)
+}
+class BuildingAdapter(private val listener : OnBuildingSelectedListener) : RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder>() {
 
     inner class BuildingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.textView)
+        val address : TextView = view.findViewById(R.id.address)
     }
 
     private val items = mutableListOf<BuildingDto>()
@@ -21,6 +24,7 @@ class BuildingAdapter : RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder>
         items.addAll(buildings)
         notifyDataSetChanged()
     }
+
 
     override fun getItemCount(): Int = items.size
 
@@ -34,6 +38,15 @@ class BuildingAdapter : RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder>
         val building = items[position]
         holder.apply {
             name.text = building.name
+            address.text = building.address
+            itemView.setOnClickListener { listener.onBuildingSelected(building.id) }
         }
+    }
+    override fun onViewRecycled(holder: BuildingViewHolder) { // (2)
+        super.onViewRecycled(holder)
+        holder.apply {
+            itemView.setOnClickListener(null)
+        }
+
     }
 }

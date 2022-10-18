@@ -3,4 +3,10 @@
     <string name="menu_windows">Building windows</string>
     <string name="menu_website">Our website</string>
     <string name="menu_email">Send us an email</string>
+    <string name="target_temperature">Target Temperature:</string>
+    <string name="current_temperature">Current Temperature:</string>
+    <string name="floor">Floor:</string>
+    <string name="windows">Windows</string>
+    <string name="heaters">Heaters</string>
+    <string name="room">Room</string>
 </resources>
