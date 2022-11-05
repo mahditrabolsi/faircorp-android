@@ -9,6 +9,7 @@ import com.mahdi.faircorp.R
 import com.mahdi.faircorp.dto.BuildingDto
 interface OnBuildingSelectedListener {
     fun onBuildingSelected(id: Long)
+    fun onBuildingChange(id: Long)
 }
 class BuildingAdapter(private val listener : OnBuildingSelectedListener) : RecyclerView.Adapter<BuildingAdapter.BuildingViewHolder>() {
 
@@ -39,7 +40,11 @@ class BuildingAdapter(private val listener : OnBuildingSelectedListener) : Recyc
         holder.apply {
             name.text = building.name
             address.text = building.address
-            itemView.setOnClickListener { listener.onBuildingSelected(building.id) }
+            itemView.setOnClickListener {listener.onBuildingSelected(building.id!!.toLong())}
+            itemView.setOnLongClickListener {
+                listener.onBuildingChange(building.id!!.toLong())
+                true
+            }
         }
     }
     override fun onViewRecycled(holder: BuildingViewHolder) { // (2)

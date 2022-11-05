@@ -1,10 +1,9 @@
 package com.mahdi.faircorp.retrofit
 
-import android.text.TextUtils
 import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.io.IOException
 
 
 const val API_USERNAME = "user"
@@ -19,12 +18,17 @@ object ApiServices {
             .header("Authorization", credentials).build()
         chain.proceed(authenticatedRequest)
     }
-    val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+    val logging = HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    val client = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(logging)
+        .build()
     val buildingApiService : BuildingApiService by lazy {
 
         Retrofit.Builder()
             .baseUrl("https://mahditrabolsi.cleverapps.io/api/")
             .addConverterFactory(MoshiConverterFactory.create())
+
             .client(client)
             .build()
             .create(BuildingApiService::class.java)
