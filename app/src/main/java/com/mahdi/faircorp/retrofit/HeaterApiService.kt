@@ -2,6 +2,7 @@ package com.mahdi.faircorp.retrofit
 
 import com.mahdi.faircorp.dto.HeaterDto
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,7 +20,7 @@ interface HeaterApiService {
     fun switchStatus(@Path("heater_id") heater_id: Long): Call<HeaterDto>
     //create heater
     @POST("heaters")
-    fun createHeater(@Path("heater") heater: HeaterDto): Call<HeaterDto>
+    fun createHeater(@Body heater: HeaterDto): Call<HeaterDto>
 
     //delete heater
     @DELETE("heaters/{id}")

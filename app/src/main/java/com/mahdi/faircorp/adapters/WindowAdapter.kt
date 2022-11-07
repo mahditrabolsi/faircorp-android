@@ -12,6 +12,7 @@ import com.mahdi.faircorp.dto.WindowStatus
 
 interface WindowListener {
     fun onWindowSwitched(id: Long)
+    fun onWindowChange(id: Long)
 }
 class WindowAdapter(private val listener: WindowListener) :
     RecyclerView.Adapter<WindowAdapter.WindowViewHolder>() {
@@ -37,7 +38,10 @@ class WindowAdapter(private val listener: WindowListener) :
             name.text = window.name
             switch.isChecked = window.windowStatus == WindowStatus.OPEN
             switch.setOnCheckedChangeListener { _, _ ->
-                listener.onWindowSwitched(window.id)
+                listener.onWindowSwitched(window.id!!)
+            }
+            itemView.setOnClickListener {
+                listener.onWindowChange(window.id!!)
             }
         }
     }
@@ -47,5 +51,7 @@ class WindowAdapter(private val listener: WindowListener) :
             switch.setOnCheckedChangeListener(null)
         }
     }
-
+    fun getWindowById(id: Long): WindowDto? {
+        return items.find { it.id == id }
+    }
 }

@@ -14,6 +14,7 @@ import com.mahdi.faircorp.dto.RoomDto
 
 interface HeaterListener {
     fun onHeaterSwitched(id: Long)
+    fun onHeaterChange(id: Long)
 }
 
 class HeaterAdapter(private val listener: HeaterListener) :
@@ -50,7 +51,10 @@ inner class HeaterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             switch.isChecked = heater.heaterStatus == HeaterStatus.ON
             switch.setOnCheckedChangeListener { _, _ ->
 
-                listener.onHeaterSwitched(heater.id)
+                listener.onHeaterSwitched(heater.id!!)
+            }
+            itemView.setOnClickListener {
+                listener.onHeaterChange(heater.id!!)
             }
 
         }
@@ -61,6 +65,10 @@ inner class HeaterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         holder.apply {
             switch.setOnCheckedChangeListener(null)
         }
+    }
+
+    fun getHeaterById(id: Long): HeaterDto? {
+        return items.find { it.id == id }
     }
 
 

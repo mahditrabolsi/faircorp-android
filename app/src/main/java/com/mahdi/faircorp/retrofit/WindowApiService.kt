@@ -2,10 +2,7 @@ package com.mahdi.faircorp.retrofit
 
 import com.mahdi.faircorp.dto.WindowDto
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface WindowApiService {
     @GET("windows")
@@ -19,7 +16,7 @@ interface WindowApiService {
 
     //create
     @POST("windows")
-    fun createWindow(window: WindowDto): Call<WindowDto>
+    fun createWindow(@Body window: WindowDto): Call<WindowDto>
 
     @DELETE("windows/{window_id}")
     fun deleteById(@Path("window_id") window_id: Long): Call<Void>

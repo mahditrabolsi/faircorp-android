@@ -11,6 +11,7 @@ import com.mahdi.faircorp.dto.RoomDto
 interface RoomListener {
     fun onWindowClicked(id: Long)
     fun onHeaterClicked(id: Long)
+    fun onRoomChange(id: Long)
 }
 class RoomAdapter(private val listener: RoomListener): RecyclerView.Adapter<RoomAdapter.RoomViewHolder>() {
 
@@ -47,10 +48,13 @@ class RoomAdapter(private val listener: RoomListener): RecyclerView.Adapter<Room
             currentTemperature.text = room.currentTemperature.toString()
             targetTemperature.text = room.targetTemperature.toString()
             Windows.setOnClickListener {
-                listener.onWindowClicked(room.id)
+                listener.onWindowClicked(room.id!!)
             }
             Heaters.setOnClickListener {
-                listener.onHeaterClicked(room.id)
+                listener.onHeaterClicked(room.id!!)
+            }
+            itemView.setOnClickListener {
+                listener.onRoomChange(room.id!!)
             }
 
         }
@@ -62,5 +66,8 @@ class RoomAdapter(private val listener: RoomListener): RecyclerView.Adapter<Room
             Windows.setOnClickListener(null)
             Heaters.setOnClickListener(null)
         }
+    }
+    fun getRoomById(id: Long): RoomDto? {
+        return items.find { it.id == id }
     }
 }

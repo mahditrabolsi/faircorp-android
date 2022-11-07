@@ -8,6 +8,9 @@ interface WindowDao {
     @Query("select * from rwindow order by name")
     fun findAll(): List<Window>
 
+    @Query("select * from rwindow where id = :id")
+    fun findById(id: Long): Window?
+
     @Query("select * from rwindow where roomId = :roomId order by name")
     fun findByRoomId(roomId: Long): List<Window>
 

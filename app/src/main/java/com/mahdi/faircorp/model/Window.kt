@@ -10,14 +10,14 @@ import com.mahdi.faircorp.dto.WindowStatus
 
 @Entity(tableName = "rwindow")
 data class Window(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long?,
     @ColumnInfo val name: String,
     @ColumnInfo(name = "roomId") val roomId: Long,
     @ColumnInfo(name = "roomName") val roomName: String,
     @ColumnInfo(name = "window_status") val windowStatus: WindowStatus
 ) {
     fun toDto(): WindowDto =
-        WindowDto(id.toLong(), name,
+        WindowDto(id, name,
             roomId,
             roomName,
             windowStatus)

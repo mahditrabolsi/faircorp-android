@@ -9,7 +9,7 @@ import com.mahdi.faircorp.dto.RoomDto
 
 @Entity(tableName = "heater")
 data class Heater(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Long?,
     @ColumnInfo val name: String,
     @ColumnInfo(name = "room_id") val roomId: Long,
     @ColumnInfo(name = "power") val power: Long?,
@@ -17,9 +17,11 @@ data class Heater(
 ) {
     fun toDto(): HeaterDto =
         HeaterDto(
-            id.toLong(), name, power,
-                roomId,
-                 heaterStatus
+            id,
+            name,
+            power,
+            roomId,
+            heaterStatus
         )
 
 }

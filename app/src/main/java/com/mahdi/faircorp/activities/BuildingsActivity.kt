@@ -24,12 +24,13 @@ class BuildingsActivity : BaseActivity(),OnBuildingSelectedListener {
     private val viewModel: BuildingViewModel by viewModels {
         BuildingViewModel.factory
     }
+    val adapter = BuildingAdapter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.Buildings_rv)
-        val adapter = BuildingAdapter(this)
+
         val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
     fab.setOnClickListener {
 
@@ -40,16 +41,6 @@ class BuildingsActivity : BaseActivity(),OnBuildingSelectedListener {
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
-
-        viewModel.findAll().observe(this) { buildings ->
-            adapter.update(buildings)
-        }
-        viewModel.networkState.observe(this) { state ->
-            if(state == BaseViewModel.State.OFFLINE) {
-                Toast.makeText(this,"Offline mode, the last known values are displayed", Toast.LENGTH_LONG)
-                    .show()
-            }
-        }
 
     }
     override fun onBuildingSelected(id: Long) {
@@ -75,7 +66,11 @@ class BuildingsActivity : BaseActivity(),OnBuildingSelectedListener {
 
         }
         dialog.findViewById<Button>(R.id.btnEdit).setOnClickListener {
+            val building =adapter.getBuildingById(id)
             val intent = Intent(this, NewBuildingActivity::class.java).putExtra(BUILDING_ID, id)
+                .putExtra(BUILDING_NAME, building?.name).putExtra(
+                    BUILDING_ADDRESS, building?.address
+                )
             startActivity(intent)
             dialog.dismiss()
         }
@@ -86,6 +81,15 @@ class BuildingsActivity : BaseActivity(),OnBuildingSelectedListener {
 
     override fun onResume() {
         super.onResume()
+        viewModel.findAll().observe(this) { buildings ->
+            adapter.update(buildings)
+            viewModel.networkState.observe(this) { state ->
+                if(state == BaseViewModel.State.OFFLINE) {
+                    Toast.makeText(this,"Offline mode, the last known values are displayed", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
 
     }
 

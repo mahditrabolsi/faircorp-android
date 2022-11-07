@@ -2,6 +2,7 @@ package com.mahdi.faircorp.retrofit
 
 import com.mahdi.faircorp.dto.RoomDto
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,7 +20,7 @@ interface RoomApiService {
 
     //create room
     @POST("rooms")
-    fun createRoom(@Path("room") room: RoomDto): Call<RoomDto>
+    fun createRoom(@Body room: RoomDto): Call<RoomDto>
 
     //delete room
     @DELETE("rooms/{id}")

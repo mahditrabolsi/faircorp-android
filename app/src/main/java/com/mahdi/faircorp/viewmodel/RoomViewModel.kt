@@ -10,6 +10,7 @@ import com.mahdi.faircorp.model.Room
 import com.mahdi.faircorp.retrofit.ApiServices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.sql.RowId
 
 class RoomViewModel(private val roomDao: RoomDao) : BaseViewModel() {
     companion object {
@@ -33,7 +34,7 @@ class RoomViewModel(private val roomDao: RoomDao) : BaseViewModel() {
                     forEach {
                         roomDao.create(
                             Room(
-                                id = it.id.toInt(),
+                                id = it.id,
                                 name = it.name,
                                 floor = it.floor,
                                 currentTemperature = it.currentTemperature,
@@ -72,7 +73,7 @@ class RoomViewModel(private val roomDao: RoomDao) : BaseViewModel() {
                     forEach {
                         roomDao.create(
                             Room(
-                                id = it.id.toInt(),
+                                id = it.id,
                                 name = it.name,
                                 floor = it.floor,
                                 currentTemperature = it.currentTemperature,
@@ -105,7 +106,7 @@ class RoomViewModel(private val roomDao: RoomDao) : BaseViewModel() {
                 room.apply {
                     roomDao.create(
                         Room(
-                            id = id.toInt(),
+                            id = id,
                             name = name,
                             floor = floor,
                             currentTemperature = currentTemperature,
@@ -125,23 +126,23 @@ class RoomViewModel(private val roomDao: RoomDao) : BaseViewModel() {
         emit(element)
     }
 
-    fun deleteRoom(room: RoomDto) = liveData {
+    fun deleteRoom(roomId: Long) = liveData {
         val element: RoomDto = withContext(Dispatchers.IO) {
             try {
-                val response = ApiServices.roomApiService.deleteRoom(room.id).execute()
+                val response = ApiServices.roomApiService.deleteRoom(roomId).execute()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.ONLINE
                 }
-                val room: RoomDto = (response.body() ?:  throw Exception("No response body")) as RoomDto
+                val room: RoomDto = (response.body() ?: throw Exception("Room not found")) as RoomDto
                 room.apply {
-                    roomDao.deleteById(room.id)
+                    roomDao.deleteById(roomId)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.OFFLINE
                 }
-                room
+                RoomDto(id = roomId, name = "", floor = 0, currentTemperature = 0.0, targetTemperature = 0.0, buildingId = 0)
             }
         }
         emit(element)

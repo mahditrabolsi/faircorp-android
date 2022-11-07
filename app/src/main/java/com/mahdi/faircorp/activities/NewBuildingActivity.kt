@@ -24,7 +24,10 @@ class NewBuildingActivity : AppCompatActivity() {
         val editTextBuildingAddress = findViewById<EditText>(R.id.editTextBuildingAddress)
         val submitButton = findViewById<Button>(R.id.SubmitBuilding)
         val id = intent.getLongExtra(BUILDING_ID, 0)
-
+        if (intent.getStringExtra(BUILDING_NAME) != null) {
+            editTextBuildingName.setText(intent.getStringExtra(BUILDING_NAME))
+            editTextBuildingAddress.setText(intent.getStringExtra(BUILDING_ADDRESS))
+        }
         submitButton.setOnClickListener {
             val buildingName = editTextBuildingName.text.toString()
             val buildingAddress = editTextBuildingAddress.text.toString()

@@ -14,6 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FairCorp">
         <activity
+            android:name=".activities.EditRoomActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.EditHeaterActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.EditWindowActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.NewBuildingActivity"
             android:exported="false">
             <meta-data

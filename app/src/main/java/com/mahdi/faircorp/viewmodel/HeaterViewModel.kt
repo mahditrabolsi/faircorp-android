@@ -39,7 +39,7 @@ class HeaterViewModel(private val heaterDao: HeaterDao) : BaseViewModel() {
                     forEach {
                         heaterDao.create(
                             Heater(
-                                id = it.id.toInt(),
+                                id = it.id,
                                 name = it.name,
                                 power = it.power,
                                 heaterStatus = it.heaterStatus,
@@ -70,7 +70,7 @@ class HeaterViewModel(private val heaterDao: HeaterDao) : BaseViewModel() {
                 heater.apply {
                     heaterDao.create(
                         Heater(
-                            id = heater.id.toInt(),
+                            id = heater.id,
                             name = heater.name,
                             power = heater.power,
                             heaterStatus = heater.heaterStatus,

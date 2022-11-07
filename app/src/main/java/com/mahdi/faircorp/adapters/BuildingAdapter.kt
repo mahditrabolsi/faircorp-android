@@ -54,4 +54,7 @@ class BuildingAdapter(private val listener : OnBuildingSelectedListener) : Recyc
         }
 
     }
+    fun getBuildingById(id: Long): BuildingDto? {
+        return items.find { it.id == id }
+    }
 }

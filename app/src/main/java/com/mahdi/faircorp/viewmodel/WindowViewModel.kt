@@ -1,12 +1,14 @@
 package com.mahdi.faircorp.viewmodel
 
 import android.util.Log
+import android.view.WindowId
 import androidx.lifecycle.*
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.mahdi.faircorp.FaircorpApplication
 import com.mahdi.faircorp.dao.WindowDao
 import com.mahdi.faircorp.dto.WindowDto
+import com.mahdi.faircorp.dto.WindowStatus
 import com.mahdi.faircorp.model.Window
 import com.mahdi.faircorp.retrofit.ApiServices
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +40,7 @@ class WindowViewModel(private val windowDao: WindowDao) : BaseViewModel() {
                     forEach {
                         windowDao.create(
                             Window(
-                                id = it.id.toInt(),
+                                id = it.id,
                                 name = it.name,
                                 roomId = it.roomId,
                                 roomName = it.roomName,
@@ -58,35 +60,55 @@ class WindowViewModel(private val windowDao: WindowDao) : BaseViewModel() {
         emit(elements)
     }
 
-    fun createWindow(window: WindowDto) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
+    fun createWindow(window: WindowDto) = liveData {
+        val element: WindowDto = withContext(Dispatchers.IO) {
             try {
-                ApiServices.windowApiService.createWindow(window).execute()
+                val response = ApiServices.windowApiService.createWindow(window).execute()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.ONLINE
+                }
+                val window: WindowDto = response.body() ?: window
+                window.apply {
+                    windowDao.create(
+                        Window(
+                            id = id,
+                            name = name,
+                            roomId = roomId,
+                            roomName = roomName,
+                            windowStatus = windowStatus
+                        )
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.OFFLINE
                 }
+                windowDao.findById(window.id!!)!!.toDto()
             }
         }
+        emit(element)
     }
-    fun deleteWindow(window: WindowDto) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
+    fun deleteWindow(windowId: Long) = liveData {
+        val element: WindowDto = withContext(Dispatchers.IO) {
             try {
-                ApiServices.windowApiService.deleteById(window.id).execute()
+                val response = ApiServices.windowApiService.deleteById(windowId).execute()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.ONLINE
+                }
+                val window: WindowDto = (response.body() ?: throw Exception("Window not found")) as WindowDto
+                window.apply {
+                    windowDao.deleteById(windowId)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     networkState.value = State.OFFLINE
                 }
+                WindowDto(id = windowId, name = "Unknown", roomId = 0, roomName = "Unknown", windowStatus = WindowStatus.CLOSED)
             }
         }
+        emit(element)
     }
 
 
