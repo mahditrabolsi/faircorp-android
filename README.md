@@ -2,6 +2,10 @@
 
 This is the Android application for the Faircorp project.
 
+## Release
+
+The application is available [here](https://github.com/mahditrabolsi/faircorp-android/releases/download/first-release/app-debug.apk)
+
 ## Installation
 
 ### Prerequisites
