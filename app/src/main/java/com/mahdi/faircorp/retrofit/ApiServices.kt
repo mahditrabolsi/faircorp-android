@@ -6,8 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 
-const val API_USERNAME = "user"
-const val API_PASSWORD = "password"
+const val API_USERNAME = "mahdi"
+const val API_PASSWORD = "user"
 
 object ApiServices {
     //authenticate to the server
